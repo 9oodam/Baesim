@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux';
 
 import { SearchInputBox } from './Input.styled'
 
 import searchImg from '../../img/search.png'
 
 const SearchInput = ({width, keyword}) => {
+  const dispatch = useDispatch();
+
   const [search, setSearch] = useState();
 
   // 검색창 placeholder
@@ -24,7 +27,8 @@ const SearchInput = ({width, keyword}) => {
 
   // Search 페이지로 이동
   function moveToSearch() {
-    window.location.href = `/search/case?q=${search}&page=1`;
+    dispatch(searchAction.searchChk(search));
+    // window.location.href = `/search/case?q=${search}&page=1`;
   }
 
   return (

@@ -28,6 +28,7 @@ export const Step = styled.div`
     margin: 0 0 20px 0;
     box-sizing: border-box;
     color: ${(props) => props.color || 'rgb(85, 85, 85)'};
+    position: relative;
 
     & .goto {
         width: 300px; height: 60px;
@@ -62,6 +63,16 @@ export const Step = styled.div`
         text-align: start;
         margin: 0 0 15px 0;
     }
+
+    & .dupChk {
+        width: 50px; height: 20px;
+        position: absolute;
+        right: 20px;
+        font-size: 12px;
+        color: #FFA500;
+        cursor: pointer;
+        pointer-events: ${(props) => props.clicked || 'visile'};
+    }
 `
 export const SubTitle = styled.div`
     width: 100%; height: 40px;
@@ -86,6 +97,7 @@ export const Input = styled.input`
     margin: 0 0 0 0;
     outline-color: rgb(51, 51, 51);
     pointer-events: ${(props) => props.clicked || 'visile'};
+    position: relative;
 `
 export const Text = styled.p`
     color: #FFA500;

@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { ethers } from 'ethers';
 import axios from 'axios';
 
+import {signupAction} from '../../../middleware';
 import {loginAction} from '../../../middleware';
 
 import { SignupBox, Title, Step, SubTitle, Label, Input, Text, Button } from './Signup.styled'
@@ -13,12 +14,17 @@ import metamask from '../../img/metamask.png'
 
 
 const SignupMid = () => {
+    const dispatch = useDispatch();
+
     const [color, setColor] = useState('rgb(200, 200, 200)');
     const [clicked, setClick] = useState('none');
     const [show, setShow] = useState('none');
 
     const [user_id, setId] = useState();
     const [user_pw, setPw] = useState();
+
+    const msgID = useSelector(state => state.signup.msgID);
+    const msgPW = useSelector(state => state.signup.msgPW);
 
     // Step1 (metamask 계정 인증)
     const getAccountInfo = async () => {
@@ -46,24 +52,17 @@ const SignupMid = () => {
     };
 
     // Step2 (id 중복 검사 후 회원가입)
+    const dupChk = () => {
+        dispatch(signupAction.signup(user_id));
+    }
+
     const trySignup = async() => {
         console.log("회원가입 시도")
         console.log(user_id, user_pw)
-
-        if(user_id == undefined) {
-            alert("아이디를 입력해주세요.")
-        }else if(user_pw == undefined) {
-            alert("비밀번호를 입력해주세요.")
-        }else {
-            try {
-                // await axios.post(`http://localhost:8080/signup`, {
-                //     withCredential : true
-                // });
-
-                window.location.href = '/login'
-            } catch (error) {
-                console.log(error);
-            }
+        try {
+            dispatch(signupAction.signupChk(user_id, user_pw))
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -85,10 +84,16 @@ const SignupMid = () => {
 
             <Step color={color} clicked={clicked}>
                 <SubTitle>Step 2</SubTitle>
+                
                 <Label color={color}>아이디</Label>
                 <Input onChange={(e) => {setId(e.target.value)}} clicked={clicked} placeholder='아이디를 입력해주세요.' />
+                <div onClick={dupChk} className='dupChk'>중복 확인</div>
+                <div className='msg'>{msgID}</div>
+                
                 <Label color={color}>비밀번호</Label>
                 <Input onChange={(e) => {setPw(e.target.value)}} clicked={clicked} placeholder='영문자, 숫자, 특수문자를 사용하여 8자 이상 입력해주세요.' />
+                <div className='msg'>{msgPW}</div>
+                
                 <Button onClick={trySignup} clicked={clicked} color={color}>회원가입</Button>
             </Step>
 
