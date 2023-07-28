@@ -91,7 +91,7 @@ const SignupMid = () => {
                 <div className='msg'>{msgID}</div>
                 
                 <Label color={color}>비밀번호</Label>
-                <Input onChange={(e) => {setPw(e.target.value)}} clicked={clicked} placeholder='영문자, 숫자, 특수문자를 사용하여 8자 이상 입력해주세요.' />
+                <Input type='password' onChange={(e) => {setPw(e.target.value)}} clicked={clicked} placeholder='영문자, 숫자, 특수문자를 사용하여 8자 이상 입력해주세요.' />
                 <div className='msg'>{msgPW}</div>
                 
                 <Button onClick={trySignup} clicked={clicked} color={color}>회원가입</Button>
@@ -138,7 +138,7 @@ const LoginMid = () => {
                 <Input onChange={(e) => setId(e.target.value)} placeholder='아이디를 입력해주세요.' />
                 <div className='msg'>{msgID}</div>
                 <Label>비밀번호</Label>
-                <Input onChange={(e) => setPw(e.target.value)} placeholder='비밀번호를 입력해주세요.' />
+                <Input type='password' onChange={(e) => setPw(e.target.value)} placeholder='비밀번호를 입력해주세요.' />
                 <div className='msg'>{msgPW}</div>
                 <Button onClick={tryLogin}>로그인</Button>
             </Step>
