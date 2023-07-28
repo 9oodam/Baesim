@@ -9,7 +9,7 @@ function loginChk(user_id, user_pw) {
         }else if (user_pw == "") {
             dispatch({type : "EMPTYPW"});
         }else {
-            const {data} = await axios.get(`http://localhost:8080/auth/login`, {name : user_id, password : user_pw},
+            const {data} = await axios.post(`http://localhost:8080/auth/login`, {name : user_id, password : user_pw},
                 {
                     withCredentials : true
                 }
