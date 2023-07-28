@@ -53,7 +53,7 @@ const SignupMid = () => {
 
     // Step2 (id 중복 검사 후 회원가입)
     const dupChk = () => {
-        dispatch(signupAction.signup(user_id));
+        dispatch(signupAction.dupChk(user_id));
     }
 
     const trySignup = async() => {
