@@ -8,11 +8,11 @@ exports.getCaseList = async (req, res) => {
             attributes : ['id', 'case_num', 'title', 'detail', 'reason', 'result', 'view_count', 'category_id',
             // 설문 완료 수
             [sequelize.fn('COUNT', sequelize.col('finisheds.id')), 'result_count'],
-            [sequelize.col('Category.name'), 'category']
+            // [sequelize.col('Category.name'), 'category']
             ],
             include : [
                 {model : Finished, attributes : []},
-                {model : Category, attributes : []}
+                {model : Category, attributes : ['name']}
             ],
             group : ['Case.id']
         });
@@ -31,6 +31,19 @@ exports.searchCase = async (req, res) => {
 
         // title이나 detail, reason에 특정 단어 포함되어 있다면 반환
         const data = await Case.findAll({
+            attributes : ['id', 'case_num', 'title', 'detail', 'reason', 'result', 'view_count', 'category_id',
+            // 설문 완료 수
+            [sequelize.fn('COUNT', sequelize.col('finisheds.id')), 'result_count'],
+            // [sequelize.col('Category.name'), 'category']
+            ],
+            include : [
+                {model : Finished, attributes : []},
+                {model : Category, attributes : ['name']}
+            ],
+            group : ['Case.id'],
+            // include : [
+            //     {model : Category, attributes : ['name']}
+            // ],
             where : {
                 [Op.or] : [
                     { title : { [Op.like] : "%" + word + "%"} },

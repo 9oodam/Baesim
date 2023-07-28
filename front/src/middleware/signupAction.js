@@ -5,13 +5,13 @@ function dupChk(user_id) {
         if(user_id == "") {
             dispatch({type : "EMPTYID"});
         }else {
-            const {data} = await axios.get(`http://localhost:8080/auth/dupChk`, {name : user_id},
+            const {data} = await axios.post(`http://localhost:8080/auth/dupChk`, {name : user_id},
                 {
                     withCredentials : true
                 }
             );
             console.log(data);
-    
+
             if(data == "중복") {
                 dispatch({type : "DUPLICATED"})
             }else if(data == "중복 아님") {
@@ -30,13 +30,13 @@ function signupChk(user_id, user_pw) {
         }else if (user_pw == "") {
             dispatch({type : "EMPTYPW"});
         }else {
-            const {data} = await axios.get(`http://localhost:8080/auth/signup`, {name : user_id, password : user_pw},
+            const {data} = await axios.post(`http://localhost:8080/auth/signup`, {name : user_id, password : user_pw},
                 {
                     withCredentials : true
                 }
             );
             console.log(data);
-    
+
             if(data == "성공") {
                 window.location.href = '/login'
             }
