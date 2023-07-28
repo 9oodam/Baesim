@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux';
 
+import { searchAction } from '../../../middleware';
+
 import { SearchInputBox } from './Input.styled'
 
 import searchImg from '../../img/search.png'
