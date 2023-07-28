@@ -8,6 +8,7 @@ import starE from '../../img/starE.png'
 import starF from '../../img/starF.png'
 import graph from '../../img/graph.png'
 import right from '../../img/right.png'
+import { useSelector } from 'react-redux'
 
 
 const SearchTop = () => {
@@ -26,15 +27,15 @@ const SearchTop = () => {
     )
 }
 
-const SearchLeft = () => {
+const SearchLeft = ({openSearchRight}) => {
     // db에서 axios로 정보 받아와서 넘기기...
-    let caseArr = [1, 2, 3, 4, 5];
+    let searchArr = useSelector(state => state.search.searchArr);
 
     return (
         <>
         <SearchMidBox>
-            {caseArr.map((value, index) => {
-                return <Case key={index} value={value} />
+            {searchArr.map((value, index) => {
+                return <Case key={index} value={value} openSearchRight={openSearchRight} />
             })}
             <PaginationBox>
 
