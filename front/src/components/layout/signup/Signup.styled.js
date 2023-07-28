@@ -65,7 +65,7 @@ export const Step = styled.div`
     }
 
     & .dupChk {
-        width: 50px; height: 20px;
+        width: 60px; height: 20px;
         position: absolute;
         right: 20px;
         font-size: 12px;
