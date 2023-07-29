@@ -6,6 +6,7 @@ function searchChk(search) {
             const {data} = await axios.get(`http://localhost:8080/case/search/${search}`, {
                 withCredentials : true
             });
+            console.log(data);
 
             dispatch({type : "SEARCH", payload : data});
 
@@ -18,7 +19,10 @@ function searchChk(search) {
 function selectCase(id) {
     return async (dispatch) => {
         try {
-            const {data} = await axios.get(`http://localhost:8080/case/detail/${id}`);
+            const {data} = await axios.get(`http://localhost:8080/case/detail/${id}`, {
+                withCredentials : true
+            });
+            console.log(data);
 
             dispatch({type : "SELECT_CASE", payload : data});
 

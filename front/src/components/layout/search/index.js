@@ -6,7 +6,10 @@ import Case from '../../util/Case'
 
 import starE from '../../img/starE.png'
 import starF from '../../img/starF.png'
+
 import graph from '../../img/graph.png'
+import reason from '../../img/reason.png'
+
 import right from '../../img/right.png'
 import { useSelector } from 'react-redux'
 
@@ -45,7 +48,7 @@ const SearchLeft = ({openSearchRight}) => {
     )
 }
 
-const ReasonBox = () => {
+const ReasonBox = ({shows}) => {
     let reason1;
     let reason2 = `원심판결을 파기한다.
     피고인을 징역 35년에 처한다.
@@ -89,35 +92,42 @@ const ReasonBox = () => {
     3. 선고형의 결정
     위에서 본 여러 양형조건들을 종합하여 주문과 같이 형을 정한다.`;
 
-    return (
-        <div className='reason-box'>
-            <div className='reason1'>
-                <h1>부산고등법원 제2형사부 판결</h1>
-                <ul>
-                    <li>사건 : 2018노22 살인, 살인미수</li>
-                    <li>피고인A : 항소인피고인</li>
-                    <li>검사 : 유지열(기소), 박재영(공판)</li>
-                    <li>변호인 : 법무법인 ○이파트너스</li>
-                    <li>원심 : 판결울산지방법원 2017. 12. 8. 선고 2017고합219</li>
-                    <li>판결 : 판결선고2018. 5. 30.</li>
-                </ul>
-            </div>
-            <div className='reason2'>
-                <h1>주문</h1>
-                {reason2}
+    if(shows == reason) {
+        return (
+            <div className='reason-box'>
+                <div className='reason1'>
+                    <h1>부산고등법원 제2형사부 판결</h1>
+                    <ul>
+                        <li>사건 : 2018노22 살인, 살인미수</li>
+                        <li>피고인A : 항소인피고인</li>
+                        <li>검사 : 유지열(기소), 박재영(공판)</li>
+                        <li>변호인 : 법무법인 ○이파트너스</li>
+                        <li>원심 : 판결울산지방법원 2017. 12. 8. 선고 2017고합219</li>
+                        <li>판결 : 판결선고2018. 5. 30.</li>
+                    </ul>
                 </div>
-            <div className='reason3'>
-                <h1>이유</h1>
-                {reason3}
+                <div className='reason2'>
+                    <h1>주문</h1>
+                    {reason2}
+                    </div>
+                <div className='reason3'>
+                    <h1>이유</h1>
+                    {reason3}
+                </div>
             </div>
-        </div>
-
-    )
+        )
+    }else if(shows == graph) {
+        return (
+            <div>graph</div>
+        )
+    }
 }
 
-const SearchRight = () => {
+const SearchRight = ({shows, showGraph}) => {
     let test = '부산고등법원 2018. 5. 30. 선고 2018노22 판결 살인,살인미수';
     let result = '징역 N년N월';
+
+    console.log(shows);
 
     return (
         <>
@@ -126,8 +136,8 @@ const SearchRight = () => {
                 <CircleBtn left={'15px'}>
                     <img src={starE}></img>
                 </CircleBtn>
-                <CircleBtn left={'55px'}>
-                    <img src={graph}></img>
+                <CircleBtn left={'55px'} onClick={showGraph}>
+                    <img src={shows}></img>
                 </CircleBtn>
                 <div className='close-btn'>x</div>
             </BtnBox>
@@ -138,8 +148,7 @@ const SearchRight = () => {
             </TitleBox>
 
 
-            <ReasonBox />
-
+            <ReasonBox shows={shows} />
 
             <Survey>
                 <div className='info'>
