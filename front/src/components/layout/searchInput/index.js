@@ -6,9 +6,11 @@ import { searchAction } from '../../../middleware';
 import { SearchInputBox } from './Input.styled'
 
 import searchImg from '../../img/search.png'
+import { useNavigate } from 'react-router-dom';
 
-const SearchInput = ({width, keyword}) => {
+const SearchInput = ({width, keyword, category}) => {
   const dispatch = useDispatch();
+  const nav = useNavigate();
 
   const [search, setSearch] = useState();
 
@@ -27,11 +29,33 @@ const SearchInput = ({width, keyword}) => {
     }
   };
 
+  // 카테고리 눌렀을 때
+  useEffect(() => {
+    if(category != null) {
+      dispatch(searchAction.searchChk(category));
+    }
+  }, [category])
+
   // Search 페이지로 이동
-  function moveToSearch() {
+  const moveToSearch = async () => {
     dispatch(searchAction.searchChk(search));
-    // window.location.href = `/search/case?q=${search}&page=1`;
   }
+
+  const succeed = useSelector(state => state.search.succeed);
+  useEffect(() => {
+    console.log(succeed, search, category);
+    if(succeed == true) {
+      dispatch(searchAction.searchInit());
+
+      nav(`/search/case?q=${search}&page=1`);
+    }
+  }, [succeed])
+
+
+  useEffect(() => {
+    console.log("search값: ", search)
+  }, [search])
+
 
   return (
     <SearchInputBox width={width}>

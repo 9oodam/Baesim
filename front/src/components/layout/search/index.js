@@ -13,6 +13,8 @@ import reason from '../../img/reason.png'
 import right from '../../img/right.png'
 import { useSelector } from 'react-redux'
 
+import axios from 'axios';
+
 
 const SearchTop = () => {
     const [isClick1, setClick1] = useState(false);
@@ -48,7 +50,7 @@ const SearchLeft = ({openSearchRight}) => {
     )
 }
 
-const ReasonBox = ({shows}) => {
+const ReasonBox = ({shows, selected}) => {
     let reason1;
     let reason2 = `원심판결을 파기한다.
     피고인을 징역 35년에 처한다.
@@ -108,11 +110,11 @@ const ReasonBox = ({shows}) => {
                 </div>
                 <div className='reason2'>
                     <h1>주문</h1>
-                    {reason2}
+                    {selected.detail}
                     </div>
                 <div className='reason3'>
                     <h1>이유</h1>
-                    {reason3}
+                    {selected.reason}
                 </div>
             </div>
         )
@@ -129,6 +131,8 @@ const SearchRight = ({shows, showGraph}) => {
 
     console.log(shows);
 
+    const selected = useSelector(state => state.search.selected);
+
     return (
         <>
         <DetailBox>
@@ -143,12 +147,12 @@ const SearchRight = ({shows, showGraph}) => {
             </BtnBox>
 
             <TitleBox>
-                {test}
-                <div className='result'>{result}   <span>미리보기</span></div>
+                {selected.title}
+                <div className='result'>{selected.resultStr}   <span>미리보기</span></div>
             </TitleBox>
 
 
-            <ReasonBox shows={shows} />
+            <ReasonBox shows={shows} selected={selected} />
 
             <Survey>
                 <div className='info'>
