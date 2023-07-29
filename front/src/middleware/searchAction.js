@@ -32,4 +32,14 @@ function selectCase(id) {
     }
 }
 
-export const searchAction = {searchChk, selectCase}
+function searchInit() {
+    return async (dispatch) => {
+        try {
+            dispatch({type : "SEARCH_INIT"})
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+export const searchAction = {searchChk, selectCase, searchInit}
