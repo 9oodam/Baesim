@@ -77,6 +77,8 @@ exports.addDummyData = async () => {
         그러나 횡령죄에서 말하는 위탁관계는 형법상 보호할 가치가 있는 것에 한정되므로, 계좌명의인과 사기범행 실행을 위해 그로부터 계좌에 연결된 접근매체를 양수한 사기범 사이의 위탁관계가 횡령죄로 보호할 가치가 없다면 형법의 관점에서는 그들 사이의 위탁관계가 있다고 할 수 없다. 따라서 계좌명의인과 돈을 송금·이체한 사기피해자 사이에 위탁관계가 존재한다고 판단하는 것이 계좌명의인과 사기범 사이의 위탁관계와 모순되는 상황이라고 할 수 없다.
         바. 요컨대, 이 사건의 핵심은 자기 명의의 계좌에 입금된 타인의 돈을 영득하는 행위를 횡령죄로 처벌할 것인가, 이를 긍정할 경우 사기범행의 실행 과정에서 제3자 명의의 계좌에 입금된 범죄수익을 사기범의 재물로 보아 형법적 보호를 부여할 것인가이다. 범행에 이용된 계좌의 명의인과 사기범 사이의 위탁관계를 인정하여 사기범의 재물에 대한 횡령행위로 평가한다면 제3자 명의 계좌를 이용하여 저질러지는 범행을 용인하고 이에 조력하는 결과가 된다. 그러한 결과가 타당하지 않음은 다언을 요하지 않는다.
         이상과 같이 다수의견에 대한 보충의견을 밝힌다.`, case_num : "2017도17494",  result : 0, category_id : category1.id});
+
+
         await Case.create({ title: "dfdfdfdf", detail : "d", reason:"df", case_num : "sdfsdf", category_id : category1.id});
         await Case.create({ title: "df", detail : "d", reason:"d", case_num : "sdfsdf", category_id : category1.id});
         await Case.create({ title: "d", detail : "d", reason:"dd", case_num : "sdfsdf", category_id : category1.id});
@@ -84,6 +86,8 @@ exports.addDummyData = async () => {
         await Case.create({ title: "d", detail : "d",reason :"df", case_num : "sdfsdf", category_id : category2.id});
         await Case.create({ title: "f", detail : "f", reason: "dfdf", case_num : "sdfsdf", category_id : category2.id});
         await Case.create({ title: "d", detail : "ff", reason:"f", case_num : "sdfsdf", category_id : category2.id});
+
+        
         await Case.create({ title: "부산고등법원 2018. 5. 30. 선고 2018노22 판결 살인,살인미수", detail : `원심판결을 파기한다.
         피고인을 징역 35년에 처한다.
         압수된 칼 1개(증 제1호)를 몰수한다.`, reason:`1. 항소이유의 요지

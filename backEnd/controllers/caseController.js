@@ -144,10 +144,16 @@ exports.getResult = async (req, res) => {
             return el.dataValues.resultStr = str;
         });
 
+        // result, resultStr 정보만 반환
+        // let resultArr = [...finishedList].map((el)=>{
+        //     return {result :el.dataValues.result, resultStr : el.dataValues.resultStr}
+        // })
+
         // 사용자의 result
         const data = await Finished.findOne({where : {user_id:id, case_id}});
         const userResult = data.dataValues.result;
 
+        // return res.json({ finishedList, userResult, resultArr });
         return res.json({ finishedList, userResult });
     } catch (error) {
         console.log(error);

@@ -19,6 +19,7 @@ class Case extends Sequelize.Model {
         },
         result: {
           type: Sequelize.INTEGER,
+          defaultValue : 0
         },
         view_count :{
           type: Sequelize.INTEGER,
