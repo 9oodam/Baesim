@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { isLogin } = require("../middleware/isLogin");
 const { checkLoginStatus } = require("../middleware/checkLoginStatus");
-const { getCaseList, searchCase, categoryCase, getDetailCase, getResult, addResult, setInterested, delInterested } = require("../controllers/caseController");
+const { getCaseList, searchCase, getDetailCase, getResult, addResult, setInterested, delInterested } = require("../controllers/caseController");
 
 // 판례 목록 반환
 router.get("/", getCaseList);
@@ -9,8 +9,8 @@ router.get("/", getCaseList);
 // 판례 검색 결과 반환
 router.get("/search/:word", searchCase);
 
-// 판례 카테고리별 반환
-router.get("/category/:name", categoryCase)
+// // 판례 카테고리별 반환
+// router.get("/category/:name", categoryCase)
 
 // 특정 판례 반환
 router.get("/detail/:id", checkLoginStatus, getDetailCase);

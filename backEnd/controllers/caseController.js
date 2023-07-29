@@ -34,7 +34,7 @@ exports.searchCase = async (req, res) => {
             attributes : ['id', 'case_num', 'title', 'detail', 'reason', 'result', 'view_count', 'category_id',
             // 설문 완료 수
             [sequelize.fn('COUNT', sequelize.col('finisheds.id')), 'result_count'],
-            // [sequelize.col('Category.name'), 'category']
+            [sequelize.col('Category.name'), 'category']
             ],
             include : [
                 {model : Finished, attributes : []},
@@ -49,6 +49,7 @@ exports.searchCase = async (req, res) => {
                     { title : { [Op.like] : "%" + word + "%"} },
                     { detail : { [Op.like] : "%" + word + "%"} },
                     { reason : { [Op.like] : "%" + word + "%"} },
+                    { '$Category.name$': { [Op.like] : word } }
                 ]
             }
         });
@@ -60,25 +61,25 @@ exports.searchCase = async (req, res) => {
     }
 }
 
-// 판례 카테고리별 반환
-exports.categoryCase = async (req, res) => {
-    try {
-        const {name} = req.params;
-        const data = await Case.findAll(
-            {
-                include : [
-                    {model : Category,
-                    where : {name}}
-                ]
-            }
-        );
+// // 판례 카테고리별 반환
+// exports.categoryCase = async (req, res) => {
+//     try {
+//         const {name} = req.params;
+//         const data = await Case.findAll(
+//             {
+//                 include : [
+//                     {model : Category,
+//                     where : {name}}
+//                 ]
+//             }
+//         );
 
-        return res.json(data);
-    } catch (error) {
-        console.log(error);
-        return res.json({ error });
-    }
-}
+//         return res.json(data);
+//     } catch (error) {
+//         console.log(error);
+//         return res.json({ error });
+//     }
+// }
 
 
 // 특정 판례 반환(판례 id)
