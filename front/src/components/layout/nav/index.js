@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 import { TopNavBox, Button } from './TopNav.styled'
@@ -8,6 +8,8 @@ import {SearchInput} from '../searchInput'
 import logo from '../../img/logo2.png'
 
 const TopNav = ({addInput, keyword}) => {
+  const nav = useNavigate()
+
   const [color, setColor] = useState('rgb(200, 200, 200)');
   const [link, setLink] = useState('/login');
   const [text, setText] = useState('로그인');
@@ -15,6 +17,7 @@ const TopNav = ({addInput, keyword}) => {
   const isLogin = useSelector(state => state.login.isLogin);
 
   useEffect(() => {
+    console.log("로그인 여부 : ", isLogin);
     if(isLogin == true) {
       setColor('#6699CC');
       setLink('/mypage');
@@ -24,7 +27,7 @@ const TopNav = ({addInput, keyword}) => {
 
   function moveToMyNft() {
     if(isLogin) {
-      window.location.href = '/mynft'
+      nav('/mynft');
     }else {
       alert('로그인 후 이용 가능합니다.')
     }

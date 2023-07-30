@@ -47,7 +47,12 @@ export const Content = styled.div`
 
     & .content {
         width: calc(100% - 310px); height: 100%;
-        background-color: black;
         position: absolute; left: 260px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    & .content .case {
+        width: 100%; height: 30px;
+        border-bottom: 1px solid silver;
     }
 `

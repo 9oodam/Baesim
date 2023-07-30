@@ -21,6 +21,12 @@ function reducer(state = init, action) {
         case "UNDUPLICATED":
             return {...state, msgID : "사용 가능한 아이디입니다.", msgPW : ""}
 
+        case "FAIL":
+            return {...state, msgID : "중복 확인 실패. 다시 확인 부탁드립니다.", msgPW : ""}
+
+        case "MSG_INIT":
+            return {...state, msgID : "", msgPW : ""}
+
         default:
             return state;
     }

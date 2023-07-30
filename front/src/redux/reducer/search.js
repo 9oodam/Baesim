@@ -5,6 +5,8 @@ let init = {
     selected : {},
     isLogin : false,
     isInterested : false,
+
+    myCaseArr : []
 }
 
 function reducer(state = init, action) {
@@ -20,6 +22,8 @@ function reducer(state = init, action) {
         case "SELECT_CASE":
             return {...state, selected : payload.case, isLogin : payload.isLogin, isInterested : payload.isInterested}
 
+        case "MY_CASE":
+            return {...state, myCaseArr : payload}
 
         default:
             return state;

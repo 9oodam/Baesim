@@ -1,13 +1,20 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 const Title = ({value, openSearchRight}) => {
+    let viewCnt = value.view_count;
+
+    const [view, setView] = useState(viewCnt);
 
     return (
         <div className='title-box'>
-            <div onClick={() => {openSearchRight(value.id)}} className='title'>
+            <div onClick={() => {
+                openSearchRight(value.id)
+                setView(viewCnt + 1);
+                }}
+                className='title'>
                 {value.title}
             </div>
-            <span>조회수<br />{value.view_count}</span>
+            <span>조회수<br />{view}</span>
             <span>설문 완료수<br />{value.result_count}</span>
         </div>
     )

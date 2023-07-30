@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 
 import { ethers } from 'ethers';
 import axios from 'axios';
 
-import {signupAction} from '../../../middleware';
+import {searchAction, signupAction} from '../../../middleware';
 import {loginAction} from '../../../middleware';
 
 import { SignupBox, Title, Step, SubTitle, Label, Input, Text, Button } from './Signup.styled'
@@ -43,7 +43,7 @@ const SignupMid = () => {
             setColor('rgb(85, 85, 85)');
             setClick('');
             setShow('block')
-          }, 3000);
+          }, 1000);
           
         } catch (error) {
           console.error("Metamask 인증 실패:", error);
@@ -53,6 +53,7 @@ const SignupMid = () => {
 
     // Step2 (id 중복 검사 후 회원가입)
     const dupChk = () => {
+        console.log("중복 확인")
         dispatch(signupAction.dupChk(user_id));
     }
 
@@ -60,11 +61,16 @@ const SignupMid = () => {
         console.log("회원가입 시도")
         console.log(user_id, user_pw)
         try {
-            dispatch(signupAction.signupChk(user_id, user_pw))
+            if(msgID == '사용 가능한 아이디입니다.') {
+                dispatch(signupAction.signupChk(user_id, user_pw))
+            }else {
+                return;
+            }
         } catch (error) {
             console.log(error);
         }
     }
+
 
     return (
         <SignupBox>       
@@ -103,6 +109,7 @@ const SignupMid = () => {
 
 const LoginMid = () => {
     const dispatch = useDispatch();
+    const nav = useNavigate();
 
     const [user_id, setId] = useState();
     const [user_pw, setPw] = useState();
@@ -121,10 +128,11 @@ const LoginMid = () => {
     // 로그인 완료되면 메인페이지로 이동
     const isLogin = useSelector(state => state.login.isLogin);
     useEffect(() => {
-        if(isLogin) {
-            window.location.href = '/';
+        console.log(isLogin);
+        if(isLogin == true) {
+            nav('/');
         }
-    })
+    }, [isLogin])
 
     return (
         <SignupBox>

@@ -16,6 +16,7 @@ const Search = () => {
   const dispatch = useDispatch();
 
   const [shows, setShow] = useState(reason);
+  const [clicked, setClick] = useState(false);
 
   // 키워드 입력값 받아오기
   const location = useLocation();
@@ -31,6 +32,7 @@ const Search = () => {
   // title 누르면 오른쪽 열리게 & case.id로 특정 판례 받아오기
   const openSearchRight = (id) => {
     console.log("title 눌림")
+    setClick(true);
     dispatch(searchAction.selectCase(id))
   }
 
@@ -52,7 +54,7 @@ const Search = () => {
 
       <SearchTop  />
       <SearchLeft openSearchRight={openSearchRight} />
-      <SearchRight shows={shows} showGraph={showGraph} />
+      <SearchRight shows={shows} clicked={clicked} showGraph={showGraph} />
     </>
   )
 }

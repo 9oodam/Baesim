@@ -32,6 +32,7 @@ const SearchInput = ({width, keyword, category}) => {
   // 카테고리 눌렀을 때
   useEffect(() => {
     if(category != null) {
+      setSearch(category);
       dispatch(searchAction.searchChk(category));
     }
   }, [category])

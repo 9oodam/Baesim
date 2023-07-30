@@ -22,7 +22,7 @@ function reducer(state = init, action) {
             return {...state, msgID : "", msgPW : "비밀번호가 틀렸습니다. 재입력 해주세요."}
 
         case "LOGIN":
-            return {...state, user_id : payload, isLogin : true};
+            return {...state, user_id : payload.user_id, isLogin : true};
 
         default:
             return state;
