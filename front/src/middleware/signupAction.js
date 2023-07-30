@@ -12,10 +12,12 @@ function dupChk(user_id) {
             );
             console.log(data);
 
-            if(data == "중복") {
+            if(data.message == "중복") {
                 dispatch({type : "DUPLICATED"})
-            }else if(data == "중복 아님") {
+            }else if(data.message == "중복 아님") {
                 dispatch({type : "UNDUPLICATED"})
+            }else {
+                dispatch({type : "FAIL"})
             }
         }
     }
@@ -37,11 +39,17 @@ function signupChk(user_id, user_pw) {
             );
             console.log(data);
 
-            if(data == "성공") {
+            if(data.message == "성공") {
                 window.location.href = '/login'
             }
         }
     }
 }
 
-export const signupAction = {dupChk, signupChk}
+function msgInit() {
+    return async (dispatch) => {
+        dispatch({type : "MSG_INIT"});
+    }
+}
+
+export const signupAction = {dupChk, signupChk, msgInit}

@@ -164,5 +164,5 @@ export const Disabled = styled.div`
     justify-content: center; align-items: center;
     color: white;
     font-size: 30px; font-weight: bold;
-    display: flex;
+    display: ${(props) => props.display || 'flex'};
 `

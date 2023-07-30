@@ -16,11 +16,11 @@ function loginChk(user_id, user_pw) {
             );
             console.log(data);
 
-            if(data == "아이디 없음") {
+            if(data.message == "아이디 없음") {
                 dispatch({type : "WRONGID"})
-            }else if(data == "비밀번호 틀림") {
+            }else if(data.message == "비밀번호 틀림") {
                 dispatch({type : "WRONGPW"})
-            }else {
+            }else if(data.message == "성공") {
                 dispatch({type : "LOGIN", payload : {user_id : user_id, user_pw : user_pw}})
             }
         }

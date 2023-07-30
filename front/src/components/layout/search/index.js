@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import axios from 'axios'
+
 import { SearchTopBox, SearchMidBox, PaginationBox, DetailBox, BtnBox, CircleBtn, TitleBox, Disabled, Survey } from './Search.styled'
 import Select from '../../util/Select'
 import Case from '../../util/Case'
@@ -11,9 +13,8 @@ import graph from '../../img/graph.png'
 import reason from '../../img/reason.png'
 
 import right from '../../img/right.png'
-import { useSelector } from 'react-redux'
-
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux'
+import { searchAction } from '../../../middleware'
 
 
 const SearchTop = () => {
@@ -36,18 +37,27 @@ const SearchLeft = ({openSearchRight}) => {
     // db에서 axios로 정보 받아와서 넘기기...
     let searchArr = useSelector(state => state.search.searchArr);
 
-    return (
-        <>
-        <SearchMidBox>
-            {searchArr.map((value, index) => {
-                return <Case key={index} value={value} openSearchRight={openSearchRight} />
-            })}
-            <PaginationBox>
+    if(searchArr.length == 0) {
+        return (
+            <SearchMidBox>
+                <div>검색 결과가 없습니다.</div>
+            </SearchMidBox>
+        )
+    }else {
+        return (
+            <>
+            <SearchMidBox>
+                {searchArr.map((value, index) => {
+                    return <Case key={index} value={value} openSearchRight={openSearchRight} />
+                })}
+                <PaginationBox>
+    
+                </PaginationBox>
+            </SearchMidBox>
+            </>
+        )
+    }
 
-            </PaginationBox>
-        </SearchMidBox>
-        </>
-    )
 }
 
 const ReasonBox = ({shows, selected}) => {
@@ -125,60 +135,116 @@ const ReasonBox = ({shows, selected}) => {
     }
 }
 
-const SearchRight = ({shows, showGraph}) => {
-    let test = '부산고등법원 2018. 5. 30. 선고 2018노22 판결 살인,살인미수';
-    let result = '징역 N년N월';
+const SearchRight = ({shows, clicked, showGraph}) => {
+    const dispatch = useDispatch();
 
-    console.log(shows);
+    // let test = '부산고등법원 2018. 5. 30. 선고 2018노22 판결 살인,살인미수';
+    // let result = '징역 N년N월';
+
+    const [star, setStar] = useState(starE);
+    const [display, setDisplay] = useState('flex');
+    const [result, setResult] = useState('N년 N월');
 
     const selected = useSelector(state => state.search.selected);
+    const isLogin = useSelector(state => state.login.isLogin);
+    const isInterested = useSelector(state => state.search.isInterested);
 
-    return (
-        <>
-        <DetailBox>
-            <BtnBox>
-                <CircleBtn left={'15px'}>
-                    <img src={starE}></img>
-                </CircleBtn>
-                <CircleBtn left={'55px'} onClick={showGraph}>
-                    <img src={shows}></img>
-                </CircleBtn>
-                <div className='close-btn'>x</div>
-            </BtnBox>
+    useEffect(() => {
+        if(isLogin == true) {
+            setDisplay('none');
+        }
 
-            <TitleBox>
-                {selected.title}
-                <div className='result'>{selected.resultStr}   <span>미리보기</span></div>
-            </TitleBox>
+        if(isInterested == true) {
+            setStar(starF)
+        }else{
+            setStar(starE)
+        }
+    }, [isLogin])
 
+    // 관심 목록에 넣기/빼기
+    const putInterest = async (id) => {
+        if(star == starE) {
+            setStar(starF);
+            try {
+                await axios.post(`http://localhost:8080/case/setInterested`, {case_id : id}, {
+                    withCredentials : true
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        }else {
+            setStar(starE);
+            try {                
+                await axios.post(`http://localhost:8080/case/delInterested`, {case_id : id}, {
+                    withCredentials : true
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
 
-            <ReasonBox shows={shows} selected={selected} />
+    // 형량 미리보기
+    const showResult = () => {
+        if(result == 'N년 N월') {
+            setResult(selected.resultStr);
+        }else {
+            setResult('N년 N월')
+        }
+    }
 
-            <Survey>
-                <div className='info'>
-                    <p>여러분이 생각하는 해당 판례의 <span className='underline'>적절한 형량</span>은 얼마인가요?<br />
-                        설문을 진행하시면 여러분의 의견이 담긴 <span className='bold'>세상에서 단 하나뿐인 NFT</span>가 발행됩니다.
-                    </p>
-                </div>
-                <div className='make-nft'>
-                    <label>징역</label>
-                    <input type='number' min={0} max={30} defaultValue={0}></input>
-                    <label>년</label>
-                    <input type='number' min={0} max={12} defaultValue={0}></input>
-                    <label>월</label>
-
-                    <div className='make-nft-btn'>
-                        설문 완료 후 NFT 발행하기
-                        <img src={right}></img>
+    if(clicked == true) {
+        return (
+            <>
+            <DetailBox>
+                <BtnBox>
+                    {isLogin &&
+                        <>
+                        <CircleBtn left={'15px'} onClick={() => {putInterest(selected.id)}}>
+                            <img src={star}></img>
+                        </CircleBtn>
+                        <CircleBtn left={'55px'} onClick={showGraph}>
+                            <img src={shows}></img>
+                        </CircleBtn>
+                        </>
+                    }
+                    <div className='close-btn'>x</div>
+                </BtnBox>
+    
+                <TitleBox>
+                    {selected.title}
+                    <div className='result'>{result}   <span onClick={showResult}>미리보기</span></div>
+                </TitleBox>
+    
+    
+                <ReasonBox shows={shows} selected={selected} />
+    
+                <Survey>
+                    <div className='info'>
+                        <p>여러분이 생각하는 해당 판례의 <span className='underline'>적절한 형량</span>은 얼마인가요?<br />
+                            설문을 진행하시면 여러분의 의견이 담긴 <span className='bold'>세상에서 단 하나뿐인 NFT</span>가 발행됩니다.
+                        </p>
                     </div>
-                </div>
-
-                <Disabled>로그인 후 이용 가능</Disabled>
-            </Survey>
-            
-        </DetailBox>
-        </>
-    )
+                    <div className='make-nft'>
+                        <label>징역</label>
+                        <input type='number' min={0} max={30} defaultValue={0}></input>
+                        <label>년</label>
+                        <input type='number' min={0} max={12} defaultValue={0}></input>
+                        <label>월</label>
+    
+                        <div className='make-nft-btn'>
+                            설문 완료 후 NFT 발행하기
+                            <img src={right}></img>
+                        </div>
+                    </div>
+    
+                    <Disabled display={display}>로그인 후 이용 가능</Disabled>
+                </Survey>
+                
+            </DetailBox>
+            </>
+        )
+    }
 }
 
 export {SearchTop, SearchLeft, SearchRight}

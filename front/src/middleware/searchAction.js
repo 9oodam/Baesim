@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+// 검색한 단어가 들어있는 판례 가져오기
 function searchChk(search) {
     return async (dispatch) => {
         try {
@@ -16,6 +17,7 @@ function searchChk(search) {
     }
 }
 
+// 타이틀 눌렀을 때 해당하는 판례 가져오기
 function selectCase(id) {
     return async (dispatch) => {
         try {
@@ -32,6 +34,7 @@ function selectCase(id) {
     }
 }
 
+// 초기화
 function searchInit() {
     return async (dispatch) => {
         try {
@@ -42,4 +45,20 @@ function searchInit() {
     }
 }
 
-export const searchAction = {searchChk, selectCase, searchInit}
+// 마이페이지 판례 목록 가져오기
+function getMyCases() {
+    return async (dispatch) => {
+        try {
+            const {data} = await axios.get('http://localhost:8080/mypage', {
+                withCredentials : true
+            })
+
+            dispatch({type : "MY_CASE", payload : data})
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+
+export const searchAction = {searchChk, selectCase, searchInit, getMyCases}
