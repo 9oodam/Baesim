@@ -44,7 +44,6 @@ const SearchInput = ({width, keyword, category}) => {
 
   const succeed = useSelector(state => state.search.succeed);
   useEffect(() => {
-    console.log(succeed, search, category);
     if(succeed == true) {
       dispatch(searchAction.searchInit());
 

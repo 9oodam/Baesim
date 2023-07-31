@@ -8,7 +8,7 @@ const MainTop = () => {
     let caseNum = '1,234';
     let finNum = 567;
 
-    let categoryArr = ['살인', '성범죄', '절도', '사기'];
+    let categoryArr = ['살인', '절도', '사기'];
 
     const [category, setCategory] = useState();
 

@@ -17,7 +17,6 @@ const TopNav = ({addInput, keyword}) => {
   const isLogin = useSelector(state => state.login.isLogin);
 
   useEffect(() => {
-    console.log("로그인 여부 : ", isLogin);
     if(isLogin == true) {
       setColor('#6699CC');
       setLink('/mypage');

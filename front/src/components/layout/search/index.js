@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { mintJusticeTokenContract } from "./abiConfig";
 
@@ -18,7 +19,6 @@ import {
 } from "./Search.styled";
 import Select from "../../util/Select";
 import Case from "../../util/Case";
-
 
 import starE from "../../img/starE.png";
 import starF from "../../img/starF.png";
@@ -49,8 +49,31 @@ const SearchTop = () => {
 };
 
 const SearchLeft = ({ openSearchRight }) => {
-  // db에서 axios로 정보 받아와서 넘기기...
-  let searchArr = useSelector((state) => state.search.searchArr);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const p = queryParams.get('page');
+
+    const [page, setPage] = useState(p);
+    const [pageArr, setArr] = useState();
+
+
+    // db에서 axios로 정보 받아와서 넘기기...
+    let searchArr = useSelector((state) => state.search.searchArr);
+    useEffect(() => {
+        if(searchArr.lenth !== 0) {
+            let pageArr = [];
+            let totalPage = Math.ceil(searchArr.length / 5);
+            for(let i=0; i<totalPage; i++) {
+                pageArr.push(i+1);
+            }
+            setArr(pageArr);
+        }
+    }, [searchArr]);
+
+    useEffect(() => {
+        console.log(pageArr);
+    }, [pageArr])
+
 
   if (searchArr.length == 0) {
     return (
@@ -71,7 +94,11 @@ const SearchLeft = ({ openSearchRight }) => {
               />
             );
           })}
-          <PaginationBox></PaginationBox>
+          <PaginationBox>
+            {pageArr && pageArr.map((value, index) => {
+                return <div key={index} className="page-btn">{value}</div>
+            })}
+          </PaginationBox>
         </SearchMidBox>
       </>
     );
@@ -105,7 +132,6 @@ const ReasonBox = ({ shows, selected }) => {
         <div className="reason3">
           <h1>이유</h1>
           {selected.reason.split("\n").map((value) => {
-            console.log(value);
             return (
               <>
                 {value}
@@ -121,143 +147,155 @@ const ReasonBox = ({ shows, selected }) => {
   }
 };
 
-const SearchRight = ({ shows, clicked, showGraph }) => {
-    const dispatch = useDispatch();
+const SearchRight = ({ shows, clicked, showGraph, closeSearchRight }) => {
+  const dispatch = useDispatch();
 
-    const [star, setStar] = useState(starE);
-    const [display, setDisplay] = useState("flex");
-    const [result, setResult] = useState("N년 N월");
+  const [star, setStar] = useState(starE);
+  const [display, setDisplay] = useState("flex");
+  const [result, setResult] = useState("N년 N월");
 
-    const selected = useSelector((state) => state.search.selected);
-    const isLogin = useSelector((state) => state.login.isLogin);
-    const isInterested = useSelector((state) => state.search.isInterested);
+  const selected = useSelector((state) => state.search.selected);
+  const isLogin = useSelector((state) => state.login.isLogin);
+  const isInterested = useSelector((state) => state.search.isInterested);
 
-    // 월렛 계정 가져오기
-    const [account, setAccount] = useState("");
+  // 월렛 계정 가져오기
+  const [account, setAccount] = useState("");
+  const [nftInfo, setNftInfo] = useState("");
+  const getAccount = async () => {
+    try {
+      if (window.ethereum) {
+        const [accounts] = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        setAccount(accounts);
+      } else {
+        console.log(window.ethereum);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getAccount();
+  });
+  useEffect(() => {
+    console.log(account);
+  }, [account]);
 
-    const getAccount = async () => {
-        try {
-        if (window.ethereum) {
-            const [accounts] = await window.ethereum.request({
-            method: "eth_requestAccounts",
-            });
-            setAccount(accounts);
-        } else {
-            console.log(window.ethereum);
-        }
-        } catch (err) {
-        console.log(err);
-        }
-    };
-    useEffect(() => {
-        getAccount();
-    });
-    useEffect(() => {
-        console.log(account);
-    }, [account]);
+  useEffect(() => {
+    if (isLogin == true) {
+      setDisplay("none");
+    }
+  }, [isLogin]);
 
+  useEffect(() => {
+    // console.log("선택한 case : ", selected);
 
-    useEffect(() => {
-        if (isLogin == true) {
-        setDisplay("none");
-        }
+    if (isInterested == true) {
+      setStar(starF);
+    } else {
+      setStar(starE);
+    }
+  }, [selected]);
 
-        if (isInterested == true) {
-        setStar(starF);
-        } else {
-        setStar(starE);
-        }
-    }, [isLogin, isInterested]);
-
-    useEffect(() => {
-        console.log(selected);
-    }, [selected]);
-
-    // 관심 목록에 넣기/빼기
-    const putInterest = async (id) => {
-        if (star == starE) {
-        setStar(starF);
-        try {
-            await axios.post(
-            `http://localhost:8080/case/setInterested`,
-            { case_id: id },
-            {
-                withCredentials: true,
-            }
-            );
-        } catch (error) {
-            console.log(error);
-        }
-        } else {
-        setStar(starE);
-        try {
-            await axios.post(
-            `http://localhost:8080/case/delInterested`,
-            { case_id: id },
-            {
-                withCredentials: true,
-            }
-            );
-        } catch (error) {
-            console.log(error);
-        }
-        }
-    };
-
-    // 형량 미리보기
-    const showResult = () => {
-        if (result == "N년 N월") {
-        setResult(selected.resultStr);
-        } else {
-        setResult("N년 N월");
-        }
-    };
-
-    // 민팅
-    const mint = async () => {
-        try {
-            // DB에 저장
-            dispatch(searchAction.saveResult())
-
-            // 민팅
-            let nft_img = '';
-            let case_num = selected.case_num;
-            let category = selected.category;
-            let date = new Date();
-            let result;
-
-            if (!account) return;
-            const res = await mintJusticeTokenContract.methods
-                .mintJusticeToken(
-                "goldeHammer",
-                case_num,
-                category,
-                date,
-                "징역 5년"
-                )
-                .send({ from: account });
-            console.log(res);
-            if (res.status) {
-                const balance = await mintJusticeTokenContract.methods
-                .balanceOf(account)
-                .call();
-                console.log(balance.length);
-                const animalTokenId = await mintJusticeTokenContract.methods
-                // 이 부분에서 balance.length를 사용할시 undefined가 발생한다. 따라서 balance는 민트된 nft의 양이므로 굳이 length를 쓰지 않고 일반 balance를 사용
-                .tokenOfOwnerByIndex(account, parseInt(balance, 10) - 1)
-                .call();
-                console.log(animalTokenId);
-
-                const animalType = await mintJusticeTokenContract.methods
-                .justiceTypes(animalTokenId)
-                .call();
-                console.log(animalType);
-            }
-        } catch (error) {
+  // 관심 목록에 넣기/빼기
+  const putInterest = async (id) => {
+    if (star == starE) {
+      setStar(starF);
+      try {
+        await axios.post(
+          `http://localhost:8080/case/setInterested`,
+          { case_id: id },
+          {
+            withCredentials: true,
+          }
+        );
+      } catch (error) {
         console.log(error);
-        }
-    };
+      }
+    } else {
+      setStar(starE);
+      try {
+        await axios.post(
+          `http://localhost:8080/case/delInterested`,
+          { case_id: id },
+          {
+            withCredentials: true,
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
+  // 형량 미리보기
+  const showResult = () => {
+    if (result == "N년 N월") {
+      setResult(selected.resultStr);
+    } else {
+      setResult("N년 N월");
+    }
+  };
+
+  // 민팅
+  const mint = async () => {
+    try {
+      // DB에 저장
+      dispatch(searchAction.saveResult());
+
+      // 민팅
+      let nft_img = "";
+      let case_num = selected.case_num;
+      let category = selected.category;
+      let date = new Date();
+      let result;
+
+      if (!account) return;
+      const res = await mintJusticeTokenContract.methods
+        .mintJusticeToken(
+          "goldeHammer",
+          "case_num",
+          "category",
+          "date",
+          "징역 5년"
+        )
+        .send({ from: account });
+      console.log(res);
+      if (res.status) {
+        const balance = await mintJusticeTokenContract.methods
+          .balanceOf(account)
+          .call();
+        console.log(balance.length);
+        const animalTokenId = await mintJusticeTokenContract.methods
+          // 이 부분에서 balance.length를 사용할시 undefined가 발생한다. 따라서 balance는 민트된 nft의 양이므로 굳이 length를 쓰지 않고 일반 balance를 사용
+          .tokenOfOwnerByIndex(account, parseInt(balance, 10) - 1)
+          .call();
+        console.log(animalTokenId);
+
+        const animalType = await mintJusticeTokenContract.methods
+          .justiceTypes(animalTokenId)
+          .call();
+        console.log(animalType);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // 민팅 정보 가져오기
+  const getNftInfo = async () => {
+    const nftInfo = await mintJusticeTokenContract.methods
+      .getAllUserNft(account)
+      .call();
+    console.log(nftInfo);
+    console.log(await mintJusticeTokenContract.methods.getMsgSender().call());
+    setNftInfo(nftInfo);
+  };
+  useEffect(() => {
+    if (account !== "") {
+      getNftInfo();
+    }
+  }, [account]);
 
   if (clicked == true) {
     return (
@@ -279,7 +317,7 @@ const SearchRight = ({ shows, clicked, showGraph }) => {
                 </CircleBtn>
               </>
             )}
-            <div className="close-btn">x</div>
+            <div onClick={() => {closeSearchRight(0)}} className="close-btn">x</div>
           </BtnBox>
 
           <TitleBox>
@@ -328,6 +366,21 @@ const SearchRight = ({ shows, clicked, showGraph }) => {
 
             <Disabled display={display}>로그인 후 이용 가능</Disabled>
           </Survey>
+          {nftInfo == "" ? (
+            <></>
+          ) : (
+            nftInfo["0"].map((img, index) => {
+              return (
+                <ul>
+                  <li>{nftInfo["0"][index]}</li>
+                  <li>{nftInfo["1"][index]}</li>
+                  <li>{nftInfo["2"][index]}</li>
+                  <li>{nftInfo["3"][index]}</li>
+                  <li>{nftInfo["4"][index]}</li>
+                </ul>
+              );
+            })
+          )}
         </DetailBox>
       </>
     );

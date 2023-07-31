@@ -43,13 +43,15 @@ const MyPageNav = ({showPage}) => {
 
 const MyPageMid = () => {
     const dispatch = useDispatch();
-    const nav = useNavigate();
 
     const [page, setPage] = useState([]);
     const myCaseArr = useSelector(state => state.search.myCaseArr);
 
-    const showPage = (id) => {
+    useEffect(() => {
         dispatch(searchAction.getMyCases());
+    }, [page])
+
+    const showPage = (id) => {
 
         if(myCaseArr.length != 0) {
             if(id == 0) {
@@ -69,6 +71,7 @@ const MyPageMid = () => {
     }
 
     const moveToSearch = (title) => {
+        console.log(title);
         dispatch(searchAction.searchChk(title));
     }
 
@@ -78,7 +81,7 @@ const MyPageMid = () => {
             <div className='content'>
                 {page.map((value, index) => {
                     return (
-                    <div onClick={() => {moveToSearch(value.Case.title)}} className='case'>
+                    <div key={index} onClick={() => {moveToSearch(value.Case.title)}} className='case'>
                         <div className='title'>{value.Case.title}</div>
                         <div className='detail'>{value.Case.detail}</div>
                     </div>

@@ -15,8 +15,18 @@ export const SearchMidBox = styled.div`
     box-sizing: border-box;
 `
 export const PaginationBox = styled.div`
-    width: 100%; height: 140px;
+    width: 100%; height: 100px;
     border: 1px solid;
+    display: flex;
+    justify-content: center; align-items: center;
+
+    & .page-btn {
+        width: 30px; height: 30px;
+        border: 1px solid;
+        font-size: 16px;
+        display: flex; justify-content: center; align-items: center;
+        
+    }
 `
 
 

@@ -22,16 +22,19 @@ const Search = () => {
   const q = queryParams.get('q');
   const page = queryParams.get('page');
 
-  useEffect(() => {
-    console.log(q);
-    console.log(page);
-  })
+  // useEffect(() => {
+  //   console.log(q);
+  //   console.log(page);
+  // })
 
   // title 누르면 오른쪽 열리게 & case.id로 특정 판례 받아오기
   const openSearchRight = (id) => {
-    console.log("title 눌림")
-    setClick(true);
-    dispatch(searchAction.selectCase(id))
+    if(id == 0) {
+      setClick(false);
+    }else {
+      setClick(true);
+      dispatch(searchAction.selectCase(id))
+    }
   }
 
   // graph 보기
@@ -52,7 +55,7 @@ const Search = () => {
 
       <SearchTop  />
       <SearchLeft openSearchRight={openSearchRight} />
-      <SearchRight shows={shows} clicked={clicked} showGraph={showGraph} />
+      <SearchRight shows={shows} clicked={clicked} showGraph={showGraph} closeSearchRight={openSearchRight} />
     </>
   )
 }
