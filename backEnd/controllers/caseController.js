@@ -124,7 +124,7 @@ exports.getDetailCase = async (req, res) => {
         const { id } = req.params;
         const { isLogin } = req;
 
-        let data = await Case.findOne({where : {id}});
+        let data = await Case.findOne({where : {id}, include : {model : Category, attributes : ['name']}});
         // 조회수 증가
         data.dataValues.view_count += 1;
         await Case.update({ view_count : data.dataValues.view_count}, {where: {id : data.dataValues.id}});
@@ -224,7 +224,7 @@ exports.getResult = async (req, res) => {
 exports.addResult = async (req, res) => {
     try {
         const { id } = req.decoded;
-        const { case_id, result, is_probation, probation_result } = req.body;
+        const { case_id, result, is_probation, k } = req.body;
         await Finished.create({user_id : id, case_id, result, is_probation, probation_result});
         return res.json({message : "성공"})
     } catch (error) {
