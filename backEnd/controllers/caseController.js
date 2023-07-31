@@ -1,11 +1,46 @@
 const {Op} = require("sequelize");
 const { Case, Finished, Interested, Category, sequelize } = require("../models");
 
+// 개월 -> 몇 년 몇 개월 단위로 변환
+const transformMonth = (result) => {
+    const year = Math.floor(result / 12);
+    const month = result % 12;
+    let str = "";
+
+    if (year == 0) {
+        str += month + "개월"
+    } else {
+        str += year+"년 "+ month + "개월"
+    }
+
+    return str;
+}
+
+// result 변환
+const transformResult = (el) => {
+    let str = "";
+
+    if (el.dataValues.is_probation) {
+        str += "집행유예 ";
+        str += transformMonth(el.dataValues.probation_result);
+        if (el.dataValues.result!=0) {
+            str += " 징역 " + transformMonth(el.dataValues.result);
+        }
+    } else {
+        // 징역
+        str += "징역 ";
+        str += transformMonth(el.dataValues.result);
+    }
+
+    return str;
+}
+
+
 // 판례 목록 반환
 exports.getCaseList = async (req, res) => {
     try {
         const data = await Case.findAll({
-            attributes : ['id', 'case_num', 'title', 'detail', 'reason', 'result', 'view_count', 'category_id',
+            attributes : ['id', 'case_num', 'title', 'detail', 'reason', 'result', 'is_probation', 'probation_result', 'view_count', 'category_id', 'createdAt',
             // 설문 완료 수
             [sequelize.fn('COUNT', sequelize.col('finisheds.id')), 'result_count'],
             // [sequelize.col('Category.name'), 'category']
@@ -31,7 +66,7 @@ exports.searchCase = async (req, res) => {
 
         // title이나 detail, reason에 특정 단어 포함되어 있다면 반환
         const data = await Case.findAll({
-            attributes : ['id', 'case_num', 'title', 'detail', 'reason', 'result', 'view_count', 'category_id',
+            attributes : ['id', 'case_num', 'title', 'detail', 'reason', 'result', 'probation_result', 'is_probation', 'view_count', 'category_id', 'createdAt'
             // 설문 완료 수
             [sequelize.fn('COUNT', sequelize.col('finisheds.id')), 'result_count'],
             [sequelize.col('Category.name'), 'category']
@@ -94,15 +129,25 @@ exports.getDetailCase = async (req, res) => {
         data.dataValues.view_count += 1;
         await Case.update({ view_count : data.dataValues.view_count}, {where: {id : data.dataValues.id}});
 
-        // result 단위 변환
-        const year = Math.floor(data.dataValues.result / 12);
-        const month = data.dataValues.result % 12;
-        let str = "";
-        if (year == 0) {
-            str = month + "개월"
-        } else {
-            str = year+"년 "+ month + "개월"
-        }
+        let str = transformResult(data);
+
+        // // result 단위 변환
+        // const year = Math.floor(data.dataValues.result / 12);
+        // const month = data.dataValues.result % 12;
+        // let str = "";
+
+        // if (data.dataValues.is_probation) {
+        //     str += "집행유예 ";
+        // } else {
+        //     // 징역
+        //     str += "징역 ";
+        // }
+
+        // if (year == 0) {
+        //     str += month + "개월"
+        // } else {
+        //     str += year+"년 "+ month + "개월"
+        // }
         data.dataValues.resultStr = str;
 
         // 관심판례였는지 여부 반환
@@ -131,18 +176,32 @@ exports.getResult = async (req, res) => {
 
         let finishedList = await Finished.findAll({where : {case_id}})
 
-        // 몇 개월 -> 몇 년 몇 개월로 변환
-        finishedList.map((el) => {
-            const year = Math.floor(el.dataValues.result / 12);
-            const month = el.dataValues.result % 12;
-            let str = "";
-            if (year == 0) {
-                str = month + "개월"
-            } else {
-                str = year+"년 "+ month + "개월"
-            }
-            return el.dataValues.resultStr = str;
-        });
+        finishedList.map((el)=>{
+            let str = transformResult(el);
+            el.dataValues.resultStr = str;
+            return el;
+        })
+
+        // // 몇 개월 -> 몇 년 몇 개월로 변환
+        // finishedList.map((el) => {
+        //     const year = Math.floor(el.dataValues.result / 12);
+        //     const month = el.dataValues.result % 12;
+        //     let str = "";
+
+        //     if (el.dataValues.is_probation) {
+        //         str += "집행유예 ";
+        //     } else {
+        //         // 징역
+        //         str += "징역 ";
+        //     }
+
+        //     if (year == 0) {
+        //         str += month + "개월"
+        //     } else {
+        //         str += year+"년 "+ month + "개월"
+        //     }
+        //     return el.dataValues.resultStr = str;
+        // });
 
         // result, resultStr 정보만 반환
         // let resultArr = [...finishedList].map((el)=>{
@@ -165,8 +224,8 @@ exports.getResult = async (req, res) => {
 exports.addResult = async (req, res) => {
     try {
         const { id } = req.decoded;
-        const { case_id, result } = req.body;
-        await Finished.create({user_id : id, case_id, result});
+        const { case_id, result, is_probation, probation_result } = req.body;
+        await Finished.create({user_id : id, case_id, result, is_probation, probation_result});
         return res.json({message : "성공"})
     } catch (error) {
         console.log(error);

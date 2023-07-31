@@ -7,7 +7,7 @@ const { sequelize } = require("./models");
 const { authRouter, caseRouter, mypageRouter } = require("./routers")
 const { isLogin } = require("./middleware/isLogin")
 
-// const {addDummyData} = require("./models/dummyDataSeeder");
+const {addDummyData} = require("./models/dummyDataSeeder");
 
 const app = express();
 const PORT = 8080;

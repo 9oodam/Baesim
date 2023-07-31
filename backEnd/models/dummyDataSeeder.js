@@ -76,7 +76,7 @@ exports.addDummyData = async () => {
         마. 한편 반대의견은 계좌명의인과 계좌의 접근매체를 양수한 자 사이에 계약에 의한 위탁관계가 존재하는 이상 신의칙 등을 근거로 그와 모순·배치되는 계좌명의인과 송금의뢰인 사이의 위탁관계를 규범적 판단이라는 이유로 인정할 수는 없다고 주장한다.
         그러나 횡령죄에서 말하는 위탁관계는 형법상 보호할 가치가 있는 것에 한정되므로, 계좌명의인과 사기범행 실행을 위해 그로부터 계좌에 연결된 접근매체를 양수한 사기범 사이의 위탁관계가 횡령죄로 보호할 가치가 없다면 형법의 관점에서는 그들 사이의 위탁관계가 있다고 할 수 없다. 따라서 계좌명의인과 돈을 송금·이체한 사기피해자 사이에 위탁관계가 존재한다고 판단하는 것이 계좌명의인과 사기범 사이의 위탁관계와 모순되는 상황이라고 할 수 없다.
         바. 요컨대, 이 사건의 핵심은 자기 명의의 계좌에 입금된 타인의 돈을 영득하는 행위를 횡령죄로 처벌할 것인가, 이를 긍정할 경우 사기범행의 실행 과정에서 제3자 명의의 계좌에 입금된 범죄수익을 사기범의 재물로 보아 형법적 보호를 부여할 것인가이다. 범행에 이용된 계좌의 명의인과 사기범 사이의 위탁관계를 인정하여 사기범의 재물에 대한 횡령행위로 평가한다면 제3자 명의 계좌를 이용하여 저질러지는 범행을 용인하고 이에 조력하는 결과가 된다. 그러한 결과가 타당하지 않음은 다언을 요하지 않는다.
-        이상과 같이 다수의견에 대한 보충의견을 밝힌다.`, case_num : "2017도17494",  result : 0, category_id : category1.id});
+        이상과 같이 다수의견에 대한 보충의견을 밝힌다.`, case_num : "2017도17494",  result : 2, is_probation : true, category_id : category1.id});
 
 
         await Case.create({ title: "대법원 2016. 2. 19. 선고 2015도15101 전원합의체 판결", detail : "상고를 기각한다.", reason:`상고이유를 판단한다.
@@ -191,7 +191,7 @@ exports.addDummyData = async () => {
 
         대법원장   양승태(재판장)        대법관   이인복 이상훈 김용덕 박보영(주심) 고영한 김창석 김신 김소영 조희대 권순일 박상옥 이기택
 
-        (출처: 대법원 2016. 2. 19. 선고 2015도15101 전원합의체 판결 [사기·전기통신금융사기피해방지및피해금환급에관한특별법위반·전자금융거래법위반] > 종합법률정보 판례)`, case_num : "2015도15101", result : 2, category_id : category1.id});
+        (출처: 대법원 2016. 2. 19. 선고 2015도15101 전원합의체 판결 [사기·전기통신금융사기피해방지및피해금환급에관한특별법위반·전자금융거래법위반] > 종합법률정보 판례)`, case_num : "2015도15101", result : 2, is_probation : false, category_id : category1.id});
         await Case.create({ title: "대법원 2017. 2. 16. 선고 2016도13362 전원합의체 판결 [특정경제범죄가중처벌등에관한법률위반(사기)(예비적죄명:사기)·사기·사문서위조·위조사문서행사·공정증서원본불실기재·불실기재공정증서원본행사·횡령]〈근저당권설정계약서 등에 대한 피해자의 서명·날인을 사취한 사건〉[공2017상,673]", detail : "원심판결을 파기하고, 사건을 서울고등법원에 환송한다.", reason:`상고이유를 판단한다.
 
         1. 무죄 부분 중 각 주위적 공소사실에 관하여
@@ -339,7 +339,7 @@ exports.addDummyData = async () => {
 
         이상과 같이 반대의견에 대한 보충의견을 밝혀 둔다.
 
-        재판관   양승태(재판장) 이상훈 박병대 김용덕 박보영 김창석(주심) 김신 김소영 조희대 권순일 박상옥 이기택 김재형`, case_num : "2016도13362", result : 1, category_id : category1.id});
+        재판관   양승태(재판장) 이상훈 박병대 김용덕 박보영 김창석(주심) 김신 김소영 조희대 권순일 박상옥 이기택 김재형`, case_num : "2016도13362", result : 1, probation_result : 4, is_probation: false, category_id : category1.id});
         await Case.create({ title: "인천지방법원 2015. 10. 16. 선고 2015노1180 판결 [사기·특수절도]", detail : `제1원심판결과 제2원심판결 중 피고인에 대한 부분을 모두 파기한다.
 
         피고인을 징역 6년에 처한다.`, reason:`. 항소이유의 요지
@@ -398,7 +398,7 @@ exports.addDummyData = async () => {
         김민철
 
         판사
-        김은솔 `, case_num : "2015노1180", result : 72, category_id : category1.id});
+        김은솔 `, case_num : "2015노1180", result : 72, is_probation: false, category_id : category1.id});
         await Case.create({ title: "인천지방법원 2015. 1. 9. 선고 2014노2031,2014노4099(병합) 판결 [사기·특수절도]", detail : `제1원심판결과 제2원심판결 중 피고인 1에 대한 부분을 모두 파기한다.
 
         피고인 1을 징역 7년에 처한다.
@@ -471,7 +471,7 @@ exports.addDummyData = async () => {
         김유경
 
         판사
-        양승우 `, result : 84, case_num : "2014노2031,2014노4099(병합)", category_id : category1.id});
+        양승우 `, result : 84, case_num : "2014노2031,2014노4099(병합)", is_probation: false, category_id : category1.id});
         await Case.create({ title: "d인천지방법원 2014. 11. 5. 선고 2014고단3764,2014고단4679(병합),2014고단5987(병합),2014고단6895(병합) 판결 [사기·특수절도]", detail : `피고인 1을 징역 3년에, 피고인 2, 피고인 3을 각 징역 10월에 각 처한다.
 
         다만, 이 판결 확정일부터 2년간 피고인 2에 대한 위 형의 집행을 유예한다.
@@ -1716,7 +1716,7 @@ exports.addDummyData = async () => {
 
 
         판사
-        강란주 `, case_num : "2015고단202, 343(병합), 492(병합)", result : 48,category_id : category2.id});
+        강란주 `, case_num : "2015고단202, 343(병합), 492(병합)", result : 48, category_id : category2.id});
         await Case.create({ title: "서울남부지방법원 2015. 5. 7. 선고 2014노1437, 2015노43(병합) 판결 [특수절도미수, 특수절도(일부 인정된 죄명 야간건조물침입절도), 야간주거침입절도(일부 인정된 죄명 야간건조물침입절도, 일부 인정된 죄명 절도 및 건조물침입), 야간주거침입절도미수(인정된 죄명 야간건조물침입절도미수)]", detail : `원심판결들을 모두 파기한다.
 
         피고인을 징역 3년에 처한다.
@@ -2303,8 +2303,8 @@ exports.addDummyData = async () => {
         위에서 본 여러 양형조건들을 종합하여 주문과 같이 형을 정한다.
         판사 신동헌(재판장) 김정우 엄성환`, case_num : "2018노22", result : 35, category_id : category3.id});
 
-        await Finished.create({user_id:1, case_id : 1, result : 12});
-        await Finished.create({user_id:1, case_id : 2, result : 5});
+        await Finished.create({user_id:1, case_id : 1, is_probation : true, probation_result : 4, result : 12});
+        await Finished.create({user_id:1, case_id : 2, is_probation : true, probation_result : 18, result : 5});
         await Finished.create({user_id:1, case_id : 10, result : 140});
         await Finished.create({user_id:1, case_id : 15, result : 50});
         await Finished.create({user_id:1, case_id : 20, result : 30});
