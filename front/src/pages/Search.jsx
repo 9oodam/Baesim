@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useAsyncError, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import {TopNav} from '../components/layout/nav'
 import {SearchTop, SearchLeft, SearchRight} from '../components/layout/search'
@@ -9,8 +9,6 @@ import { searchAction } from '../middleware'
 
 import graph from '../components/img/graph.png'
 import reason from '../components/img/reason.png'
-
-import axios from 'axios'
 
 const Search = () => {
   const dispatch = useDispatch();
