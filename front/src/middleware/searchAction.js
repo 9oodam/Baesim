@@ -60,5 +60,16 @@ function getMyCases() {
     }
 }
 
+// 설문 결과 저장
+function saveResult() {
+    return async (dispatch) => {
+        try {
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
 
-export const searchAction = {searchChk, selectCase, searchInit, getMyCases}
+
+export const searchAction = {searchChk, selectCase, searchInit, getMyCases, saveResult}

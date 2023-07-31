@@ -48,14 +48,10 @@ const SearchInput = ({width, keyword, category}) => {
     if(succeed == true) {
       dispatch(searchAction.searchInit());
 
+      // arr 다 들어오고 페이지 넘어가기
       nav(`/search/case?q=${search}&page=1`);
     }
   }, [succeed])
-
-
-  useEffect(() => {
-    console.log("search값: ", search)
-  }, [search])
 
 
   return (

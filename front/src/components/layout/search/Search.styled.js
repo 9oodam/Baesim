@@ -26,6 +26,7 @@ export const DetailBox = styled.div`
     border: 1px solid silver;
     background-color: white;
     overflow-y: scroll;
+    overflow-x: hidden;
 
     & .reason-box {
         padding: 20px 50px 20px 50px;
@@ -125,10 +126,14 @@ export const Survey = styled.div`
     }
     & .make-nft {
         width: 100%; height: 100px;
-        display: flex; align-items: center; justify-content: center;
+        display: flex;
+        align-items: center; justify-content: center;
         background-color: #FFA500;
-        font-size: 20px; font-weight: bold;
+        font-size: 16px; font-weight: bold;
         color: white;
+    }
+    & .make-nft .wrap {
+        margin: 0 10px 0 10px;
     }
     & .make-nft input {
         width: 55px;
@@ -136,7 +141,7 @@ export const Survey = styled.div`
         text-align: end;
         outline: none; border: none;
         //background-color: rgba(0, 0, 0, 0);
-        font-size: 20px;
+        font-size: 16px;
         padding: 5px;
         box-sizing: border-box;
     }
