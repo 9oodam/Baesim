@@ -66,7 +66,7 @@ exports.searchCase = async (req, res) => {
 
         // title이나 detail, reason에 특정 단어 포함되어 있다면 반환
         const data = await Case.findAll({
-            attributes : ['id', 'case_num', 'title', 'detail', 'reason', 'result', 'probation_result', 'is_probation', 'view_count', 'category_id', 'createdAt'
+            attributes : ['id', 'case_num', 'title', 'detail', 'reason', 'result', 'probation_result', 'is_probation', 'view_count', 'category_id', 'createdAt',
             // 설문 완료 수
             [sequelize.fn('COUNT', sequelize.col('finisheds.id')), 'result_count'],
             [sequelize.col('Category.name'), 'category']
@@ -76,6 +76,7 @@ exports.searchCase = async (req, res) => {
                 {model : Category, attributes : ['name']}
             ],
             group : ['Case.id'],
+            // group : ['casess.id'],
             // include : [
             //     {model : Category, attributes : ['name']}
             // ],
