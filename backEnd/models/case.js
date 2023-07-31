@@ -13,6 +13,9 @@ class Case extends Sequelize.Model {
         title: {
           type: Sequelize.STRING,
         },
+        header : {
+          type: Sequelize.TEXT,
+        },
         detail: {
           type: Sequelize.TEXT,
         },

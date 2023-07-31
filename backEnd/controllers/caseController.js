@@ -40,7 +40,7 @@ const transformResult = (el) => {
 exports.getCaseList = async (req, res) => {
     try {
         const data = await Case.findAll({
-            attributes : ['id', 'case_num', 'title', 'detail', 'reason', 'result', 'is_probation', 'probation_result', 'view_count', 'category_id', 'createdAt',
+            attributes : ['id', 'case_num', 'title', 'header', 'detail', 'reason', 'result', 'is_probation', 'probation_result', 'view_count', 'category_id', 'createdAt',
             // 설문 완료 수
             [sequelize.fn('COUNT', sequelize.col('finisheds.id')), 'result_count'],
             // [sequelize.col('Category.name'), 'category']
@@ -66,7 +66,7 @@ exports.searchCase = async (req, res) => {
 
         // title이나 detail, reason에 특정 단어 포함되어 있다면 반환
         const data = await Case.findAll({
-            attributes : ['id', 'case_num', 'title', 'detail', 'reason', 'result', 'probation_result', 'is_probation', 'view_count', 'category_id', 'createdAt',
+            attributes : ['id', 'case_num', 'title', 'header','detail', 'reason', 'result', 'probation_result', 'is_probation', 'view_count', 'category_id', 'createdAt',
             // 설문 완료 수
             [sequelize.fn('COUNT', sequelize.col('finisheds.id')), 'result_count'],
             [sequelize.col('Category.name'), 'category']
@@ -211,7 +211,18 @@ exports.getResult = async (req, res) => {
 
         // 사용자의 result
         const data = await Finished.findOne({where : {user_id:id, case_id}});
-        const userResult = data.dataValues.result;
+        let userResult = ""
+        if (data && data.dataValues.is_probation) {
+            userResult += "집행유예 ";
+            userResult += transformMonth(data.dataValues.probation_result);
+            if (data.dataValues.result!=0) {
+                userResult += " 징역 "+ transformMonth(data.dataValues.result);
+            }
+        } else if (data){
+            userResult += "징역 "+ transformMonth(data.dataValues.result);
+        } else {
+            userResult += "설문 내역 없음"
+        }
 
         // return res.json({ finishedList, userResult, resultArr });
         return res.json({ finishedList, userResult });
