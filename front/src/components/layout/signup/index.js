@@ -64,7 +64,7 @@ const SignupMid = () => {
             if(msgID == '사용 가능한 아이디입니다.') {
                 dispatch(signupAction.signupChk(user_id, user_pw))
             }else {
-                return;
+                alert("아이디 중복 확인 후 이용바랍니다.");
             }
         } catch (error) {
             console.log(error);
@@ -134,6 +134,12 @@ const LoginMid = () => {
         }
     }, [isLogin])
 
+    // 회원가입 페이지로 이동
+    const moveToSignup = () => {
+        window.location.href = '/signup'
+    }
+
+
     return (
         <SignupBox>
             <Title>
@@ -153,9 +159,7 @@ const LoginMid = () => {
 
             <Step>
                 <Label>아직 회원이 아니신가요?</Label>
-                <Link to={'/signup'}>
-                    <Button>회원가입으로 이동</Button>
-                </Link>
+                <Button onClick={moveToSignup}>회원가입으로 이동</Button>
             </Step>
         </SignupBox>
     )

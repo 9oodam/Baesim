@@ -35,7 +35,7 @@ sequelize
 app.use("/auth", authRouter);
 app.use("/case", caseRouter);
 app.use("/mypage", isLogin, mypageRouter);
-// addDummyData();
+addDummyData();
 
 app.listen(PORT, ()=>{
     console.log("서버 열림");

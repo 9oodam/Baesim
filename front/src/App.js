@@ -11,7 +11,7 @@ function App() {
         <Route path={'/mypage'} element={<MyPage />} />
         <Route path={'/mynft'} element={<MyNft />} />
         <Route path={'/signup'} element={<Signup />} />
-        <Route path={'/Login'} element={<Login />} />
+        <Route path={'/login'} element={<Login />} />
       </Routes>
     </div>
   );

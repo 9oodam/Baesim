@@ -5,10 +5,10 @@ import starF from '../../img/starF.png';
 import reason from '../../img/reason.png';
 import profile from '../../img/profile.png';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { searchAction } from '../../../middleware'
 
-import Case from '../../util/Case';
 
 const MyPageTop = () => {
     return (
@@ -43,12 +43,12 @@ const MyPageNav = ({showPage}) => {
 
 const MyPageMid = () => {
     const dispatch = useDispatch();
+    const nav = useNavigate();
 
     const [page, setPage] = useState([]);
     const myCaseArr = useSelector(state => state.search.myCaseArr);
 
     const showPage = (id) => {
-        console.log("dd")
         dispatch(searchAction.getMyCases());
 
         if(myCaseArr.length != 0) {
@@ -56,24 +56,20 @@ const MyPageMid = () => {
                 setPage([])
             }
             // 괌심있는 판례 목록 가져오기
-            else if(id == 1 && myCaseArr.interested) {
-                setPage(myCaseArr.interested)
+            else if(id == 1 && myCaseArr.interestedList) {
+                setPage(myCaseArr.interestedList)
             }
             // 설문 완료한 판례 목록 가져오기
-            else if(id == 2 && myCaseArr.finished) {
-                setPage(myCaseArr.finished)
+            else if(id == 2 && myCaseArr.finishedList) {
+                setPage(myCaseArr.finishedList)
             }
         }else {
             setPage([]);
         }
     }
 
-    useEffect(() => {
-        console.log(myCaseArr)
-    }, [myCaseArr])
-
-    const moveToDetail = (id) => {
-        console.log(id);
+    const moveToSearch = (title) => {
+        dispatch(searchAction.searchChk(title));
     }
 
     return (
@@ -81,9 +77,8 @@ const MyPageMid = () => {
             <MyPageNav showPage={showPage} />
             <div className='content'>
                 {page.map((value, index) => {
-                    console.log(value.Case)
                     return (
-                    <div className='case'>
+                    <div onClick={() => {moveToSearch(value.Case.title)}} className='case'>
                         <div className='title'>{value.Case.title}</div>
                         <div className='detail'>{value.Case.detail}</div>
                     </div>
