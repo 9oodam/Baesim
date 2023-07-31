@@ -224,7 +224,7 @@ exports.getResult = async (req, res) => {
 exports.addResult = async (req, res) => {
     try {
         const { id } = req.decoded;
-        const { case_id, result, is_probation, k } = req.body;
+        const { case_id, result, is_probation, probation_result } = req.body;
         await Finished.create({user_id : id, case_id, result, is_probation, probation_result});
         return res.json({message : "성공"})
     } catch (error) {
