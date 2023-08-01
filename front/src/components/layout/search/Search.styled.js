@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 export const SearchTopBox = styled.div`
     width: 100%; height: 60px;
@@ -16,16 +16,26 @@ export const SearchMidBox = styled.div`
 `
 export const PaginationBox = styled.div`
     width: 100%; height: 100px;
-    border: 1px solid;
     display: flex;
     justify-content: center; align-items: center;
+`
 
-    & .page-btn {
-        width: 30px; height: 30px;
-        border: 1px solid;
-        font-size: 16px;
-        display: flex; justify-content: center; align-items: center;
-        
+export const paginationBtnStyles = css`
+    font-weight: bold;
+`
+
+export const PaginationBtn = styled.div`
+    width: 30px; height: 30px;
+    font-size: 16px;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer;
+
+    ${paginationBtnStyles};
+    font-weight: ${({ bold }) => (bold ? 'bold' : 'normal')};
+
+    &:hover {
+        font-weight: bold;
+        text-decoration: underline;
     }
 `
 

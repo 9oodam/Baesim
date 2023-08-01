@@ -16,6 +16,7 @@ import {
   TitleBox,
   Disabled,
   Survey,
+  PaginationBtn,
 } from "./Search.styled";
 import Select from "../../util/Select";
 import Case from "../../util/Case";
@@ -53,27 +54,45 @@ const SearchLeft = ({ openSearchRight }) => {
     const queryParams = new URLSearchParams(location.search);
     const p = queryParams.get('page');
 
-    const [page, setPage] = useState(p);
-    const [pageArr, setArr] = useState();
-
-
     // db에서 axios로 정보 받아와서 넘기기...
     let searchArr = useSelector((state) => state.search.searchArr);
+
+    const [page, setPage] = useState(p);
+    const [pageNum, setNum] = useState();
+    const [pageArr, setArr] = useState(searchArr.slice(0, 5));
+
+
     useEffect(() => {
         if(searchArr.lenth !== 0) {
-            let pageArr = [];
+            let pageNum = [];
             let totalPage = Math.ceil(searchArr.length / 5);
             for(let i=0; i<totalPage; i++) {
-                pageArr.push(i+1);
+                pageNum.push(i+1);
             }
-            setArr(pageArr);
+            setNum(pageNum);
         }
     }, [searchArr]);
 
     useEffect(() => {
-        console.log(pageArr);
+        console.log(pageNum);
+    }, [pageNum])
+
+    useEffect(() => {
+      console.log(page);
+      let firstIndex = page - 1;
+      let lastIndex = firstIndex + 5;
+      let arr = searchArr.slice(firstIndex*5, page*5);
+      setArr(arr);
+    }, [page])
+
+    useEffect(() => {
+      console.log(pageArr)
     }, [pageArr])
 
+    useEffect(() => {
+      let arr = searchArr.slice(0, 5);
+      setArr(arr);
+    }, [])
 
   if (searchArr.length == 0) {
     return (
@@ -85,7 +104,7 @@ const SearchLeft = ({ openSearchRight }) => {
     return (
       <>
         <SearchMidBox>
-          {searchArr.map((value, index) => {
+          {pageArr.map((value, index) => {
             return (
               <Case
                 key={index}
@@ -95,8 +114,10 @@ const SearchLeft = ({ openSearchRight }) => {
             );
           })}
           <PaginationBox>
-            {pageArr && pageArr.map((value, index) => {
-                return <div key={index} className="page-btn">{value}</div>
+            {pageNum && pageNum.map((value, index) => {
+                return <PaginationBtn onClick={() => {
+                  setPage(value)}}
+                  key={index} bold={value === page}>{value}</PaginationBtn>
             })}
           </PaginationBox>
         </SearchMidBox>
@@ -107,9 +128,11 @@ const SearchLeft = ({ openSearchRight }) => {
 
 const ReasonBox = ({ shows, selected }) => {
   let splited;
+  let headerTxt;
   useEffect(() => {
     splited = selected.reason.split("\n");
-  }, [selected]);
+    headerTxt = selected.header;
+      }, [selected]);
 
   if (shows == reason) {
     return (
@@ -131,7 +154,7 @@ const ReasonBox = ({ shows, selected }) => {
         </div>
         <div className="reason3">
           <h1>이유</h1>
-          {selected.reason.split("\n").map((value) => {
+          {selected.reason.split("\n").map((value, index) => {
             return (
               <>
                 {value}
@@ -352,7 +375,7 @@ const SearchRight = ({ shows, clicked, showGraph, closeSearchRight }) => {
               </div>
               <div className="wrap">
                 <label>집행유예</label>
-                <input type="number" min={0} max={30} defaultValue={0}></input>
+                <input type="number" min={0} max={15} defaultValue={0}></input>
                 <label>년</label>
                 <input type="number" min={0} max={12} defaultValue={0}></input>
                 <label>월</label>
@@ -366,7 +389,7 @@ const SearchRight = ({ shows, clicked, showGraph, closeSearchRight }) => {
 
             <Disabled display={display}>로그인 후 이용 가능</Disabled>
           </Survey>
-          {nftInfo == "" ? (
+          {/* {nftInfo == "" ? (
             <></>
           ) : (
             nftInfo["0"].map((img, index) => {
@@ -380,7 +403,7 @@ const SearchRight = ({ shows, clicked, showGraph, closeSearchRight }) => {
                 </ul>
               );
             })
-          )}
+          )} */}
         </DetailBox>
       </>
     );
